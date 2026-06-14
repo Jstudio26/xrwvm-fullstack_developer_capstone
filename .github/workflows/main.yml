@@ -2,9 +2,14 @@ name: 'Lint Code'
 
 on:
   push:
-    branches: [master, main]
+    branches:
+      - master
+      - main
+
   pull_request:
-    branches: [master, main]
+    branches:
+      - master
+      - main
 
 jobs:
   lint_python:
@@ -28,11 +33,14 @@ jobs:
       - name: Print working directory
         run: pwd
 
-      - name: Run Linter
+      - name: Run Python Linter
         run: |
           pwd
-          find . -name "*.py" -exec flake8 --max-line-length=300 --ignore=E302,E128,E231,E501,E225,E722,E275,E305,E402,E712,E124,F401,F841,E226,E121 '{}' +
-          echo "Linted all the python files successfully"
+          find . -name "*.py" -exec flake8 \
+            --max-line-length=300 \
+            --ignore=E302,E128,E231,E501,E225,E722,E275,E305,E402,E712,E124,F401,F841,E226,E121 \
+            '{}' +
+          echo "Linted all Python files successfully"
 
   lint_js:
     name: Lint JavaScript Files
@@ -48,12 +56,16 @@ jobs:
           node-version: '14'
 
       - name: Install JSHint
-        run: npm install jshint --global
+        run: npm install -g jshint
 
       - name: Create JSHint config
-        run: printf '{"esversion": 8}' > .jshintrc
-
-      - name: Run Linter
         run: |
-          find ./server/database -name "*.js" -not -path "*/node_modules/*" -exec jshint '{}' +
-          echo "Linted all the js files successfully"
+          echo '{"esversion": 8}' > .jshintrc
+
+      - name: Run JavaScript Linter
+        run: |
+          find ./server/database \
+            -name "*.js" \
+            -not -path "*/node_modules/*" \
+            -exec jshint '{}' +
+          echo "Linted all JavaScript files successfully"
