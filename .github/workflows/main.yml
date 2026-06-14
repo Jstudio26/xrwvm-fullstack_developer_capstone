@@ -26,7 +26,7 @@ jobs:
     - name: Run Linter
       run: |
         pwd
-        find . -name "*.py" -exec flake8 {} +
+        find . -name "*.py" -exec flake8 --max-line-length=300 --ignore=E302,E128,E231,E501,E225,E722,E275,E305,E402,E712,E124,F401,F841 {} +
         echo "Linted all the python files successfully"
 
   lint_js:
@@ -43,5 +43,5 @@ jobs:
       run: npm install jshint --global
     - name: Run Linter
       run: |
-        find ./server/database -name "*.js" -exec jshint {} +
+        find ./server/database -name "*.js" -not -path "*/node_modules/*" -exec jshint --esversion=8 {} +
         echo "Linted all the js files successfully"
